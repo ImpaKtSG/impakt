@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  impakt-frontend:
+    build: 
+      context: ./impakt-frontend
+      dockerfile: prod.Dockerfile
+    ports:
+      - "80:80"
+
+networks:
+  impakt-network:
+    driver: bridge
+    
+    
+
