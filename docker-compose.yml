@@ -2,6 +2,7 @@ version: '3'
 
 services:
   impakt-frontend:
+    container_name: impakt-frontend
     build: 
       context: ./impakt-frontend
       dockerfile: dev.Dockerfile
@@ -10,6 +11,37 @@ services:
     volumes:
       - ./impakt-frontend/src:/app/src
       - ./impakt-frontend/public:/app/public
+    networks:
+      - impakt-network
+
+  impakt-backend:
+    container_name: impakt-backend
+    build: 
+      context: ./impakt-backend
+      dockerfile: dev.Dockerfile
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./impakt-backend/api:/app/api
+    networks:
+      - impakt-network
+    depends_on:
+      - impakt-database
+  
+  impakt-database:
+    container_name: impakt-database
+    image: postgres:16
+    ports:
+      - "5432:5432"
+    networks:
+      - impakt-network
+    volumes:
+      - ./impakt-backend/pgdata:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: impakt
+    
 
 networks:
   impakt-network:

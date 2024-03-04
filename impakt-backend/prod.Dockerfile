@@ -1,0 +1,13 @@
+FROM python:3.12-alpine
+WORKDIR /app
+
+# Install dependencies
+COPY requirements.txt requirements.txt
+RUN pip install --upgrade pip --no-cache-dir -r requirements.txt
+
+# Copy source code
+COPY . .
+ENV PYTHON_ENV=production
+
+# Run the application
+CMD ["python", "api/app.py"]
