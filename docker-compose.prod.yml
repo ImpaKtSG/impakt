@@ -23,7 +23,10 @@ services:
     networks:
       - impakt-network
     depends_on:
-      - impakt-database
+      impakt-database:
+        condition: service_healthy
+      impakt-minio:
+        condition: service_healthy
   
   impakt-database:
     container_name: impakt-database
@@ -38,6 +41,36 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: impakt
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 2s
+      timeout: 2s
+      retries: 5
+      start_period: 60s
+
+  impakt-minio:
+    container_name: impakt-minio
+    image: minio/minio
+    ports:
+      - 9000:9000
+      - 9001:9001
+    networks:
+      - impakt-network
+    volumes:
+      - ./impakt-backend/minio-data:/data
+    environment:
+      MINIO_ROOT_USER: minio
+      MINIO_ROOT_PASSWORD: minio123
+    command: minio server /data
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 2s
+      timeout: 2s
+      retries: 5
+      start_period: 60s
+    
+
+    
     
 
 networks:
