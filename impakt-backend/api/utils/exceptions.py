@@ -1,10 +1,8 @@
-from enum import Enum
 from typing import Any
+from flask import jsonify
 
-from werkzeug.exceptions import HTTPException
 
-
-class _HTTPExceptionCode(Enum):
+class _HTTPExceptionCode:
     BAD_REQUEST = 400
     UNAUTHORIZED = 401
     FORBIDDEN = 403
@@ -31,40 +29,43 @@ class _HTTPExceptionCode(Enum):
     HTTP_VERSION_NOT_SUPPORTED = 505
 
 
-class AppException(HTTPException):
-    def __init__(self, message: str, status_code: _HTTPExceptionCode = 400):
+class AppException(Exception):
+    def __init__(self, type: str, status_code: _HTTPExceptionCode = 400,  message: str = None):
+        self.type = type
         self.message = message
         self.status_code = status_code
-        super().__init__(description=message)
+        super().__init__(message)
 
-    def __repr__(self):
+    def to_dict(self):
         return {
-            "status_code": self.status_code.value,
-            "type": self.status_code.name,
+            "status_code": self.status_code,
+            "type": self.type,
             "message": self.message,
         }
+
+    def __repr__(self):
+        return jsonify(self.to_dict())
 
     def __str__(self):
         return self.message
 
-
-class AppExceptions(Enum):
+class AppExceptions:
     BAD_REQUEST = AppException(
-        "Resource provided is invalid", _HTTPExceptionCode.BAD_REQUEST
+        "BAD_REQUEST", _HTTPExceptionCode.BAD_REQUEST, "Resource provided is invalid"
     )
     RESOURCE_NOT_FOUND = AppException(
-        "Resource not found", _HTTPExceptionCode.NOT_FOUND
+        "RESOURCE_NOT_FOUND", _HTTPExceptionCode.NOT_FOUND, "Resource not found"
     )
     RESOURCE_EXISTS = AppException(
-        "Resource already exists", _HTTPExceptionCode.CONFLICT
+        "RESOURCE_EXISTS", _HTTPExceptionCode.CONFLICT, "Resource already exists"
     )
     NOT_IMPLEMENTED = AppException(
-        "Not implemented", _HTTPExceptionCode.NOT_IMPLEMENTED
+        "NOT_IMPLEMENTED", _HTTPExceptionCode.NOT_IMPLEMENTED, "Not implemented"
     )
     SERVER_ERROR = AppException(
-        "Server error", _HTTPExceptionCode.INTERNAL_SERVER_ERROR
+        "SERVER_ERROR", _HTTPExceptionCode.INTERNAL_SERVER_ERROR, "Server error"
     )
 
     @staticmethod
     def GENERIC_EXCEPTION(message: Any):
-        return AppException(str(message), _HTTPExceptionCode.INTERNAL_SERVER_ERROR)
+        return AppException("GENERIC_EXCEPTION", _HTTPExceptionCode.INTERNAL_SERVER_ERROR, str(message))

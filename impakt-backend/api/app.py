@@ -29,10 +29,10 @@ app = Flask(__name__)
 
 @app.errorhandler(AppException)
 def handle_error(error: AppException):
-    response = error.__repr__()
+    response = error.to_dict()
 
     app.logger.error(f"{response.get('type')}: {response.get('message')}")
-    return response, error.status_code.value
+    return response, error.status_code
 
 
 if __name__ == "__main__":
