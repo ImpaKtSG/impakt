@@ -15,7 +15,7 @@ load_dotenv(".env.development")
 base_url = "postgresql+asyncpg://{}:{}@{}:{}/{}".format(
     os.getenv("POSTGRES_USER"),
     os.getenv("POSTGRES_PASSWORD"),
-    'localhost',
+    "localhost",
     os.getenv("POSTGRES_PORT"),
     os.getenv("POSTGRES_DB"),
 )
