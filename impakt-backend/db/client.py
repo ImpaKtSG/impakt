@@ -1,6 +1,5 @@
-from sqlalchemy import create_engine
+from sqlalchemy.ext.asyncio import create_async_engine
 from sqlalchemy.engine import Engine
-import os
 
 
 # SQLAlchemy engine
@@ -14,8 +13,8 @@ def make_engine(
     debug: bool = False,
 ) -> Engine:
 
-    url = f"postgresql://{username}:{password}@{loc}/{database}"
-    engine = create_engine(
+    url = f"postgresql+asyncpg://{username}:{password}@{loc}/{database}"
+    engine = create_async_engine(
         url,
         echo=echo,
         echo_pool=debug,
