@@ -67,4 +67,4 @@ class AppExceptions(Enum):
 
     @staticmethod
     def GENERIC_EXCEPTION(message: Any):
-        return AppException(str(message), _HTTPExceptionCode.BAD_REQUEST)
+        return AppException(str(message), _HTTPExceptionCode.INTERNAL_SERVER_ERROR)
