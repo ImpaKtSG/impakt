@@ -1,4 +1,5 @@
 from endpoints import hello_blueprint
+from utils import AppException
 from flask import Flask
 from dotenv import dotenv_values
 import os
@@ -24,6 +25,15 @@ else:
 os.environ.update(config)
 
 app = Flask(__name__)
+
+
+@app.errorhandler(AppException)
+def handle_error(error: AppException):
+    response = error.__repr__()
+
+    app.logger.error(f"{response.get('type')}: {response.get('message')}")
+    return response, error.status_code.value
+
 
 if __name__ == "__main__":
     app.register_blueprint(hello_blueprint, url_prefix="/hello")

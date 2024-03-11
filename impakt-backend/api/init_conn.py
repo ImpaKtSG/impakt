@@ -9,4 +9,4 @@ engine = make_engine(
     database=os.getenv("POSTGRES_DB"),
     echo=False,
     debug=False,
-)                         
+)
