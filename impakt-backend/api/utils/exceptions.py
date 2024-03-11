@@ -30,7 +30,24 @@ class _HTTPExceptionCode:
 
 
 class AppException(Exception):
-    def __init__(self, type: str, status_code: _HTTPExceptionCode = 400,  message: str = None):
+    """Custom exception class for the application.
+
+    This class extends the built-in Exception class and adds a type and status code.
+
+    Args:
+        type (str): The type of the exception.
+        status_code (_HTTPExceptionCode, optional): The HTTP status code associated with the exception. Defaults to 400.
+        message (str, optional): The error message. Defaults to None.
+
+    Attributes:
+        type (str): The type of the exception.
+        message (str): The error message.
+        status_code (_HTTPExceptionCode): The HTTP status code associated with the exception.
+    """
+
+    def __init__(
+        self, type: str, status_code: _HTTPExceptionCode = 400, message: str = None
+    ):
         self.type = type
         self.message = message
         self.status_code = status_code
@@ -48,6 +65,7 @@ class AppException(Exception):
 
     def __str__(self):
         return self.message
+
 
 class AppExceptions:
     BAD_REQUEST = AppException(
@@ -68,4 +86,6 @@ class AppExceptions:
 
     @staticmethod
     def GENERIC_EXCEPTION(message: Any):
-        return AppException("GENERIC_EXCEPTION", _HTTPExceptionCode.INTERNAL_SERVER_ERROR, str(message))
+        return AppException(
+            "GENERIC_EXCEPTION", _HTTPExceptionCode.INTERNAL_SERVER_ERROR, str(message)
+        )
