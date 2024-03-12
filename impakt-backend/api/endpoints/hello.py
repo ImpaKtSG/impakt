@@ -15,5 +15,4 @@ class HelloResponse(BaseModel):
 @validate(query=HelloResponse)
 def get_hello():
     name = request.query_params.name
-    print(os.environ)
     return f"Hello, {name}!, {os.environ['PYTHON_ENV']}"
