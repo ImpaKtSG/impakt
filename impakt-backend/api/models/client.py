@@ -33,6 +33,7 @@ def make_session(engine: AsyncEngine) -> AsyncSession:
     Session = async_sessionmaker(engine, expire_on_commit=False)
     return Session()
 
+
 load_dynamic_env()
 
 # Create the engine
