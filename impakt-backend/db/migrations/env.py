@@ -23,7 +23,7 @@ base_url = "postgresql+asyncpg://{}:{}@{}:{}/{}".format(
 context.config.set_section_option(
     context.config.config_ini_section, "sqlalchemy.url", base_url
 )
-from db.models import Base, Company, CompanyDescription
+from api.models import Base
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
