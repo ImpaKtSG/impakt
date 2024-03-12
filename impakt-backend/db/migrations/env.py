@@ -19,7 +19,7 @@ base_url = "postgresql+asyncpg://{}:{}@{}:{}/{}".format(
     os.getenv("POSTGRES_PORT"),
     os.getenv("POSTGRES_DB"),
 )
-print(base_url)
+
 context.config.set_section_option(
     context.config.config_ini_section, "sqlalchemy.url", base_url
 )
