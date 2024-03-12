@@ -7,10 +7,14 @@ from sqlalchemy.ext.asyncio import async_engine_from_config
 
 from alembic import context
 
-from dotenv import load_dotenv
+from api.utils.load_env import load_dynamic_env
 import os
+import sys
 
-load_dotenv(".env.development")
+os.environ["PYTHON_ENV"] = "development"
+sys.path.append(os.getcwd() + "/api")
+load_dynamic_env()
+
 
 base_url = "postgresql+asyncpg://{}:{}@{}:{}/{}".format(
     os.getenv("POSTGRES_USER"),
