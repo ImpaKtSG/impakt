@@ -23,6 +23,7 @@ services:
       - "8080:8080"
     volumes:
       - ./impakt-backend/api:/app/api
+      - ./impakt-backend/db:/app/db
     networks:
       - impakt-network
     depends_on:
