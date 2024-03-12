@@ -6,7 +6,7 @@ from sqlalchemy.ext.declarative import declared_attr
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.exc import IntegrityError
 from typing import Generic, Dict, Any, Tuple, TypeVar
-from api.utils import AppExceptions, classproperty
+from utils import AppExceptions, classproperty
 
 
 class Base(DeclarativeBase):

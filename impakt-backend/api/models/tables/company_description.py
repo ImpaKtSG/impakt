@@ -1,4 +1,4 @@
-from .. import Base, CRUDMixin
+from ..base import Base, CRUDMixin
 
 from sqlalchemy.orm import mapped_column, Mapped
 from sqlalchemy import Integer, String, ForeignKey
