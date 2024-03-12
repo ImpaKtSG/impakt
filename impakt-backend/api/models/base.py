@@ -165,7 +165,9 @@ class CRUDMixin(Generic[Table]):
         Returns:
             Table: All instances of the table.
         """
-        ret = await session.get(cls)
+        stmt = select(cls)
+        exec = await session.execute(stmt)
+        ret = exec.all()
         if ret is None:
             raise AppExceptions.RESOURCE_NOT_FOUND
         return ret
