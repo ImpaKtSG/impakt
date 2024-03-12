@@ -1,28 +1,17 @@
 from endpoints import hello_blueprint
-from utils import AppException
+from utils import AppException, load_dynamic_env
 from flask import Flask
-from dotenv import dotenv_values
 import os
+import sys
 
-# check if the environment is development or production
-# and load the appropriate .env file
-# PYTHON_ENV is set in the Dockerfile
-if os.getenv("PYTHON_ENV") == "development":
-    config = {
-        **dotenv_values(".env.development"),
-        **dotenv_values(".env.local"),
-        **os.environ,
-    }
-elif os.getenv("PYTHON_ENV") == "production":
-    config = {
-        **dotenv_values(".env.production"),
-        **dotenv_values(".env.local"),
-        **os.environ,
-    }
-else:
-    raise ValueError("Invalid value for PYTHON_ENV")
+# since this is the entrypoint for the application
+# we need to add the current working directory to the path
+# so that we can import everything from the project
+sys.path.append(os.getcwd())
 
-os.environ.update(config)
+# load the environment variables
+load_dynamic_env()
+
 
 app = Flask(__name__)
 
