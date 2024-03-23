@@ -1,5 +1,5 @@
 from sqlalchemy import Column, and_
-from sqlalchemy.orm import DeclarativeBase, ColumnProperty
+from sqlalchemy.orm import DeclarativeBase, MappedAsDataclass
 from sqlalchemy.sql import update, select, delete
 from sqlalchemy.inspection import inspect
 from sqlalchemy.ext.declarative import declared_attr
@@ -9,7 +9,7 @@ from typing import Generic, Dict, Any, Tuple, TypeVar
 from utils import AppExceptions, classproperty
 
 
-class Base(DeclarativeBase):
+class Base(MappedAsDataclass, DeclarativeBase, repr=False, init=False):
     """Base class for all SQLAlchemy declarative models in the application.
 
     This class provides a default __tablename__ attribute that is derived from the class name.
@@ -49,7 +49,7 @@ def _generate_where_clause(cls: Table, data: Dict[str, Any]):
 class CRUDMixin(Generic[Table]):
 
     @classproperty
-    def pk(cls) -> Tuple[Column]:
+    def pk(cls) -> Tuple[Column, ...]:
         """Gets the primary key columns of the table.
 
         This class property returns a tuple of SQLAlchemy Column objects representing the primary key columns of the table.
@@ -67,7 +67,7 @@ class CRUDMixin(Generic[Table]):
         return tuple(inspected.primary_key)
 
     @classproperty
-    def columns(cls) -> Tuple[ColumnProperty]:
+    def columns(cls) -> Tuple[Column, ...]:
         """Gets the columns of the table.
 
         This class property returns a tuple of SQLAlchemy ColumnProperty objects representing the columns of the table.
@@ -211,7 +211,7 @@ class CRUDMixin(Generic[Table]):
         return ret
 
     @classmethod
-    async def delete(cls: Table, session: AsyncSession, pk: Dict[str, Any]) -> Table:
+    async def delete(cls: Table, session: AsyncSession, pk: Dict[str, Any]) -> None:
         """Deletes an existing instance of the table based on the provided primary key.
 
         This class method generates a WHERE clause from the provided primary key, executes a DELETE statement with the WHERE clause, and returns the deleted instance. If an IntegrityError occurs, it rolls back the session and raises an appropriate exception.
@@ -227,12 +227,13 @@ class CRUDMixin(Generic[Table]):
             AppExceptions.GENERIC_EXCEPTION: If any other IntegrityError occurs.
 
         Returns:
-            Table: The deleted instance of the table.
+            None
         """
         try:
             filters = _generate_where_clause(cls, pk)
             stmt = delete(cls).where(filters)
-            ret = await session.execute(stmt)
+            await session.execute(stmt)
+
         except IntegrityError as e:
 
             await session.rollback()
