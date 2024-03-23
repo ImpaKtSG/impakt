@@ -1,5 +1,7 @@
 from typing import Any
 from flask import jsonify
+from quart_schema import RequestSchemaValidationError
+import os
 
 
 class _HTTPExceptionCode:
@@ -37,21 +39,21 @@ class AppException(Exception):
     Args:
         type (str): The type of the exception.
         status_code (_HTTPExceptionCode, optional): The HTTP status code associated with the exception. Defaults to 400.
-        message (str, optional): The error message. Defaults to None.
+        message (Any, optional): The error message. Defaults to None.
 
     Attributes:
         type (str): The type of the exception.
-        message (str): The error message.
+        message (Any): The error message.
         status_code (_HTTPExceptionCode): The HTTP status code associated with the exception.
     """
 
     def __init__(
-        self, type: str, status_code: _HTTPExceptionCode = 400, message: str = None
+        self, type: str, status_code: _HTTPExceptionCode = 400, message: Any = None
     ):
+        super().__init__(str(message))
         self.type = type
         self.message = message
         self.status_code = status_code
-        super().__init__(message)
 
     def to_dict(self):
         return {
@@ -83,6 +85,19 @@ class AppExceptions:
     SERVER_ERROR = AppException(
         "SERVER_ERROR", _HTTPExceptionCode.INTERNAL_SERVER_ERROR, "Server error"
     )
+
+    @staticmethod
+    def VALIDATION_ERROR(error: RequestSchemaValidationError):
+        is_development = os.getenv("PYTHON_ENV") == "development"
+        include_additional_info = {
+            k: is_development
+            for k in ["include_url", "include_context", "include_input"]
+        }
+        return AppException(
+            "VALIDATION_ERROR",
+            _HTTPExceptionCode.BAD_REQUEST,
+            error.validation_error.errors(**include_additional_info),
+        )
 
     @staticmethod
     def GENERIC_EXCEPTION(message: Any):
