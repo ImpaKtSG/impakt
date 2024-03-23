@@ -8,8 +8,5 @@ class SubSdg(Base, CRUDMixin["SubSdg"]):
     __name__ = "SubSdg"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    sdg_id: Mapped[int] = mapped_column(Integer, ForeignKey('Sdg.id'))
+    sdg_id: Mapped[int] = mapped_column(Integer, ForeignKey("Sdg.id"))
     name: Mapped[str] = mapped_column(String, nullable=False)
-                                                            
-    
-    

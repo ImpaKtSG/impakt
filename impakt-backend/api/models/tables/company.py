@@ -22,11 +22,12 @@ class Company(Base, CRUDMixin["Company"]):
             )
             row = await cls.get(s, data={"id": ret.id})
             print(await cls.get_all(s))
-            print(await cls.update(s, {'id': row.id}, data={"id": ret.id, "name": "test2"}))
+            print(
+                await cls.update(
+                    s, {"id": row.id}, data={"id": ret.id, "name": "test2"}
+                )
+            )
             print(await cls.get(s, data={"id": ret.id}))
             await s.close()
 
-
         return ret
-
-    
