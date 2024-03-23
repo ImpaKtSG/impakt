@@ -25,9 +25,9 @@ class Base(DeclarativeBase):
         """Generates the table name from the class name.
 
         Returns:
-            str: The table name, which is the lowercase version of the class name.
+            str: The table name equivalent to the class name.
         """
-        return self.__name__.lower()
+        return self.__name__
 
 
 Table = TypeVar("Table", bound=Base)
@@ -241,3 +241,11 @@ class CRUDMixin(Generic[Table]):
             elif str(e).find("UniqueViolationError") != -1:
                 raise AppExceptions.RESOURCE_EXISTS from e
             raise AppExceptions.GENERIC_EXCEPTION(e.detail) from e
+        
+    def __repr__(self):
+        """Generates a string representation of the instance of the table.
+
+        Returns:
+            str: A string representation of the instance of the table.
+        """
+        return f"{self.__name__}({', '.join(f'{c.name}={getattr(self, c.name)!r}' for c in self.columns)})"

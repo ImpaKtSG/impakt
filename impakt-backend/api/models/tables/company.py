@@ -20,11 +20,13 @@ class Company(Base, CRUDMixin["Company"]):
             ret = await cls.create(
                 s, data={"name": "test", "stock_ticker": "test", "website": "test"}
             )
-            print(await cls.get(s, data={"id": ret.id}))
+            row = await cls.get(s, data={"id": ret.id})
             print(await cls.get_all(s))
+            print(await cls.update(s, {'id': row.id}, data={"id": ret.id, "name": "test2"}))
+            print(await cls.get(s, data={"id": ret.id}))
             await s.close()
+
 
         return ret
 
-    def __repr__(self):
-        return f"Company(id={self.id!r}, name={self.name!r}, stock_ticker={self.stock_ticker!r}, website={self.website!r})"
+    
