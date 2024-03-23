@@ -16,6 +16,7 @@ services:
 
   impakt-backend:
     container_name: impakt-backend
+    restart: always
     build: 
       context: ./impakt-backend
       dockerfile: dev.Dockerfile
