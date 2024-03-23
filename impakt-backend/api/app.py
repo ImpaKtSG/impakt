@@ -2,6 +2,8 @@
 from endpoints import hello_blueprint
 from utils import AppException, load_dynamic_env
 from quart import Quart
+from quart_cors import cors
+from quart_schema import QuartSchema
 import os
 import sys
 
@@ -14,6 +16,11 @@ sys.path.append(os.getcwd())
 load_dynamic_env()
 
 app = Quart(__name__)
+app = cors(app, allow_origin=os.getenv("API_URL", None))
+
+# allow validation of request schemas
+QuartSchema(app)
+
 
 
 @app.errorhandler(AppException)

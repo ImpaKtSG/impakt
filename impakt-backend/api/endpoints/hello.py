@@ -1,5 +1,5 @@
-from quart import Blueprint, request
-from flask_pydantic import validate
+from quart import Blueprint, Request
+from quart_schema import validate_response, validate_request
 from pydantic import BaseModel
 import os
 from models.tables import Company
