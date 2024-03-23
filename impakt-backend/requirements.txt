@@ -8,7 +8,6 @@ blinker==1.7.0
 click==8.1.7
 colorama==0.4.6
 Flask==3.0.2
-Flask-Pydantic==0.12.0
 greenlet==3.0.3
 h11==0.14.0
 h2==4.1.0
@@ -26,8 +25,11 @@ platformdirs==4.2.0
 priority==2.0.0
 pydantic==2.6.3
 pydantic_core==2.16.3
+pyhumps==3.8.0
 python-dotenv==1.0.1
 Quart==0.19.4
+quart-cors==0.7.0
+quart-schema==0.19.1
 SQLAlchemy==2.0.27
 typing_extensions==4.10.0
 tzdata==2024.1

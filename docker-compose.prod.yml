@@ -16,6 +16,9 @@ services:
     build: 
       context: ./impakt-backend
       dockerfile: prod.Dockerfile
+    env_file:
+      - ./impakt-backend/.env.production
+      - ./impakt-backend/.env.local
     ports:
       - "8080:8080"
     volumes:
