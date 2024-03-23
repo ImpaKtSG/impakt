@@ -1,6 +1,7 @@
+#!/usr/bin/env python
 from endpoints import hello_blueprint
 from utils import AppException, load_dynamic_env
-from flask import Flask
+from quart import Quart
 import os
 import sys
 
@@ -12,8 +13,7 @@ sys.path.append(os.getcwd())
 # load the environment variables
 load_dynamic_env()
 
-
-app = Flask(__name__)
+app = Quart(__name__)
 
 
 @app.errorhandler(AppException)

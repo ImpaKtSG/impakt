@@ -1,8 +1,8 @@
-from flask import Blueprint, request
+from quart import Blueprint, request
 from flask_pydantic import validate
-import json
 from pydantic import BaseModel
 import os
+from models.tables import Company
 
 hello_blueprint = Blueprint("hello", __name__)
 
@@ -12,7 +12,6 @@ class HelloResponse(BaseModel):
 
 
 @hello_blueprint.route("/", methods=["GET"])
-@validate(query=HelloResponse)
-def get_hello():
-    name = request.query_params.name
-    return f"Hello, {name}!, {os.environ['PYTHON_ENV']}"
+async def get_hello():
+    ret = await Company.test()
+    return str(ret)

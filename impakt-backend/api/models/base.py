@@ -241,7 +241,7 @@ class CRUDMixin(Generic[Table]):
             elif str(e).find("UniqueViolationError") != -1:
                 raise AppExceptions.RESOURCE_EXISTS from e
             raise AppExceptions.GENERIC_EXCEPTION(e.detail) from e
-        
+
     def __repr__(self):
         """Generates a string representation of the instance of the table.
 
