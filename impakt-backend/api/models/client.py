@@ -6,6 +6,8 @@ from sqlalchemy.ext.asyncio import (
 )
 import os
 from utils import load_dynamic_env
+import atexit
+import asyncio
 
 
 # SQLAlchemy engine
@@ -45,3 +47,11 @@ engine = make_engine(
     echo=False,
     debug=False,
 )
+
+
+# on exit, close the engine
+async def cleanup():
+    await engine.dispose()
+
+
+atexit.register(lambda: asyncio.run(cleanup()))
