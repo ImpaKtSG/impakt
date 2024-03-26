@@ -1,19 +1,21 @@
-from flask import Blueprint, request
-from flask_pydantic import validate
-import json
-from pydantic import BaseModel
-import os
+from quart import Blueprint, Request
+from quart_schema import validate_response, validate_querystring, validate_request
+
+from models.tables import Company
+from dataclasses import dataclass
+
 
 hello_blueprint = Blueprint("hello", __name__)
 
 
-class HelloResponse(BaseModel):
-    name: str
+@dataclass
+class HelloResponse:
+    message: str
+    a: int
 
 
 @hello_blueprint.route("/", methods=["GET"])
-@validate(query=HelloResponse)
-def get_hello():
-    name = request.query_params.name
-    print(os.environ)
-    return f"Hello, {name}!, {os.environ['PYTHON_ENV']}"
+@validate_querystring(HelloResponse)
+async def get_hello(query_args: HelloResponse):
+    ret = await Company.test()
+    return str(ret)
